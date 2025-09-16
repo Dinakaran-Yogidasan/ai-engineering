@@ -1,0 +1,31 @@
+name: Dev action workflow for ReactJS
+run-name: ${{ github.actor }} is testing out GitHub Actions for ReactJs web app
+on: push
+jobs:
+  dev-action-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output GitHub Context
+        run: echo "${{ toJson(github) }}"
+      - name: Get code from repository
+        uses: actions/checkout@v4
+      - name: Node.js setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+      - name: Install dependencies
+        run: npm ci
+  build:
+    needs: dev-action-job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code from repository
+        uses: actions/checkout@v4
+      - name: Node.js setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+      - name: Build project
+        run: npm run build
